@@ -16,7 +16,8 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
+import event.views
+
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^', include('event.urls')),
+    url(r'^', event.views.Home.as_view(), name='index'),
 ]
