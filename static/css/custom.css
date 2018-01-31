@@ -12,6 +12,19 @@
     width: 100%
 }
 
+.small_background {
+    background-image: url('https://hdqwalls.com/wallpapers/triangles-colorful-background-nz.jpg');
+    background-size: 100%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    margin-top: 0;
+    position: absolute;
+    width: 100%
+}
+.small_background_container {
+    margin-top: 6%;
+}
+
 .search_event {
     padding-top: 15%;
 }

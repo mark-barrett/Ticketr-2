@@ -20,7 +20,7 @@
                     <a class="nav-link text-white" href="#">Sell Your Ticket</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Organise an Event</a>
+                    <a class="nav-link text-white" href="{% url 'create-event' %}">Create Event</a>
                 </li>
                 <li class="nav-item">
                     {% if user.is_authenticated %}
