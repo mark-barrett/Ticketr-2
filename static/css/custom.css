@@ -1,0 +1,25 @@
+/*  Custom CSS for Ticketr
+    Author: Mark Barrett
+    Version: 1.0
+    Date: 31/01/2018
+ */
+.home_background {
+    background-image: url('https://hdqwalls.com/wallpapers/triangles-colorful-background-nz.jpg');
+    background-size: 100%;
+    padding-top: 8%;
+    padding-bottom: 10%;
+    position: absolute;
+    width: 100%
+}
+
+.search_event {
+    padding-top: 15%;
+}
+
+.more_padding {
+    padding: 2%;
+}
+
+.login {
+    padding-top: 20%;
+}

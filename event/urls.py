@@ -19,5 +19,5 @@ from django.contrib import admin
 import event.views
 
 urlpatterns = [
-    url(r'^', event.views.Home.as_view(), name='index'),
+    url(r'^', event.views.Home.as_view(), name='index')
 ]

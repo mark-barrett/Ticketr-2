@@ -4,6 +4,44 @@
 
 {% block content %}
 
-<h1>Hello World</h1>
+{% include 'menu.html' %}
+
+<div class="home_background">
+    <div class="text-center">
+        <h1 class="text-white">Start your next event or sell your ticket to a Ticketr event</h1>
+    </div>
+</div>
+<div class="search_event">
+    <div class="row">
+        <div class="col-md-1">
+
+        </div>
+        <div class="col-md-10">
+            <div class="card more_padding">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" class="form-control form-control-lg" id="exampleInputPassword1" placeholder="Event Name or Category">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" class="form-control form-control-lg" id="exampleInputPassword1" placeholder="Location">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-dark btn-lg btn-block">Search Events</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">
+
+        </div>
+    </div>
+</div>
 
 {% endblock content %}
