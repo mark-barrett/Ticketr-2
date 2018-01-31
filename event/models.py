@@ -5,13 +5,13 @@ from PIL import Image
 class Organiser(models.Model):
 
     name = models.CharField(max_length=256)
-    about = models.TextField()
+    about = models.TextField(blank=True)
     image = models.ImageField(upload_to='static/organiser_images', blank=True, null=True)
-    website = models.CharField(max_length=256)
-    facebook = models.CharField(max_length=256)
-    twitter = models.CharField(max_length=256)
-    background_colour = models.CharField(max_length=10)
-    text_color = models.CharField(max_length=10)
+    website = models.CharField(max_length=256, blank=True)
+    facebook = models.CharField(max_length=256, blank=True)
+    twitter = models.CharField(max_length=256, blank=True)
+    background_colour = models.CharField(max_length=10, default='#D3D3D3', blank=True)
+    text_color = models.CharField(max_length=10, default='#000000', blank=True)
     user = models.ForeignKey(User)
 
     class Meta:

@@ -21,6 +21,11 @@
     position: absolute;
     width: 100%
 }
+
+.asteriskField {
+    display: none;
+}
+
 .small_background_container {
     margin-top: 6%;
 }
