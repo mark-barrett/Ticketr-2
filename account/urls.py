@@ -21,5 +21,6 @@ import account.views
 urlpatterns = [
     url(r'^sign-in/$', account.views.SignIn.as_view(), name='sign-in'),
     url(r'^sign-up/$', account.views.SignUp.as_view(), name='sign-up'),
+    url(r'^sign-out/$', account.views.SignOut.as_view(), name='sign-out'),
     url(r'^forgot-password/$', account.views.ForgotPassword.as_view(), name='forgot-password'),
 ]

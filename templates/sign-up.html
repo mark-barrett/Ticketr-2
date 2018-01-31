@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Ticketr - Sign Up{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-4">
+
+    </div>
+    <div class="col-md-4">
+        <div class="login">
+            <div class="text-center">
+                <img src="/static/images/logo.png" width="50%">
+                <hr/>
+            </div>
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} text-center" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <div class="text-center">Sign Up</div>
+                </div>
+                <div class="card-body">
+                    <form name="sign-up" action="" method="post">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="firstName">First Name</label>
+                                    <input type="text" class="form-control" id="firstName" placeholder="First Name" name="first_name">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="lastName">Last Name</label>
+                                    <input type="text" class="form-control" id="lastName" placeholder="Last Name" name="last_name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Email address</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" name="email">
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password">
+                        </div>
+                        <br/>
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-dark btn-block">Sign Up</button>
+                    </form>
+                </div>
+            </div>
+
+            <br/>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center">Already have an account? <a href="{% url 'sign-in' %}">Sign In now</a>.</div>
+                </div>
+            </div>
+            <br/>
+        </div>
+    </div>
+    <div class="col-md-4">
+
+    </div>
+</div>
+
+{% endblock content %}

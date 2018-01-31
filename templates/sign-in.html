@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Ticketr - Ticket Sales Platform for Event Owners and Event Goers{% endblock %}
+{% block title %}Ticketr - Sign In{% endblock %}
 
 {% block content %}
 
@@ -14,7 +14,13 @@
                 <img src="/static/images/logo.png" width="50%">
                 <hr/>
             </div>
-
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} text-center" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
             <div class="card">
                 <div class="card-header bg-dark text-white">
                     <div class="text-center">Sign In</div>
@@ -32,6 +38,7 @@
                             <div class="float-right" style="padding-top: 2%; padding-bottom: 2%"><a href="{% url 'forgot-password' %}">Forgot Password?</a></div>
                         </div>
                         <br/>
+                        {% csrf_token %}
                         <button type="submit" class="btn btn-dark btn-block">Sign In</button>
                     </form>
                 </div>
@@ -44,6 +51,7 @@
                     <div class="text-center">Don't have an account? <a href="{% url 'sign-up' %}">Create one now</a>.</div>
                 </div>
             </div>
+            <br/>
         </div>
     </div>
     <div class="col-md-4">
