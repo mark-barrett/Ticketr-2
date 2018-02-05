@@ -50,14 +50,6 @@ class EventForm(ModelForm):
         fields = '__all__'
 
 
-    # Overriding save allows us to process the value of the servers, variables and required packages.
-    def save(self, commit):
-        # Get the unsave Package instance
-        instance = forms.ModelForm.save(self, False)
-
-        print("Hello World")
-
-
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(EventForm, self).__init__(*args, **kwargs)

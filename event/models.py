@@ -36,7 +36,7 @@ class Event(models.Model):
     show_remaining_tickets = models.BooleanField()
     allow_resell = models.CharField(max_length=1)
     when_resell = models.CharField(max_length=1, blank=True)
-    amount_resell = models.IntegerField(blank=True)
+    amount_resell = models.IntegerField(null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Events'
@@ -48,14 +48,14 @@ class Event(models.Model):
 class Ticket(models.Model):
 
     name = models.CharField(max_length=128)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     quantity = models.IntegerField()
     price = models.DecimalField(decimal_places=2, max_digits=6)
-    sales_start_date = models.DateField()
-    sales_start_time = models.DateTimeField()
-    sales_end_date = models.DateField()
-    sales_end_time = models.DateTimeField()
-    event = models.ForeignKey(User)
+    sales_start_date = models.DateField(blank=True, null=True)
+    sales_start_time = models.DateTimeField(blank=True, null=True)
+    sales_end_date = models.DateField(blank=True, null=True)
+    sales_end_time = models.DateTimeField(blank=True, null=True)
+    event = models.ForeignKey(Event)
 
     class Meta:
         verbose_name_plural = 'Tickets'
