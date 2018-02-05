@@ -26,14 +26,17 @@ class Event(models.Model):
     title = models.CharField(max_length=256)
     location = models.CharField(max_length=256)
     start_date = models.DateField()
-    start_time = models.DateField()
-    end_date = models.DateTimeField()
-    end_time = models.DateTimeField()
+    start_time = models.TimeField()
+    end_date = models.DateField()
+    end_time = models.TimeField()
     image = models.ImageField(upload_to='static/event_images', blank=True, null=True)
     description = models.TextField()
     organiser = models.ForeignKey(Organiser)
     privacy = models.CharField(max_length=1)
     show_remaining_tickets = models.BooleanField()
+    allow_resell = models.CharField(max_length=1)
+    when_resell = models.CharField(max_length=1, blank=True)
+    amount_resell = models.IntegerField(blank=True)
 
     class Meta:
         verbose_name_plural = 'Events'

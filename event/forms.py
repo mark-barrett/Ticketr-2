@@ -7,21 +7,56 @@ from event.models import *
 
 
 class EventForm(ModelForm):
+
+    PRIVACY = (
+        ('P', 'List your event publicly for anybody to see.'),
+        ('N', 'Only people with the events link can see the event. It will be unlisted')
+    )
+    ALLOW_RESELL_CHOICES = (
+        ('Y', 'Yes! - I want event goers to be able to resell their tickets.'),
+        ('N', 'No! - I do not want people to be able to resell their tickets')
+    )
+
+    RESELL_WHEN_CHOICES = (
+        # W: Whenever
+        # S: Sold Out
+        # A: Amount
+        ('W', 'Allow event goers to resell their tickets at anytime.'),
+        ('S', 'Allow event goers to resell their tickets after the event has sold out.'),
+        ('A', 'Allow event goers to resell their tickets after a certain amount of tickets have been sold.')
+    )
+
     title = forms.CharField(max_length=265)
     location = forms.CharField(max_length=256)
-    start_date = forms.DateField()
-    start_time = forms.DateTimeField()
-    end_date = forms.DateField()
-    end_time = forms.DateTimeField()
+    start_date = forms.DateField(widget=forms.TextInput(
+        attrs={'type': 'date'}
+    ))
+    start_time = forms.TimeField()
+    end_date = forms.DateField(widget=forms.TextInput(
+        attrs={'type': 'date'}
+    ))
+    end_time = forms.TimeField()
     image = forms.ImageField()
     organiser = forms.ModelChoiceField(queryset=None)
     description = forms.CharField(widget=forms.Textarea)
-    privacy = forms.BooleanField()
-    show_remaining_tickets = forms.BooleanField()
+    privacy = forms.ChoiceField(choices=PRIVACY)
+    show_remaining_tickets = forms.BooleanField(required=False)
+    allow_resell = forms.ChoiceField(choices=ALLOW_RESELL_CHOICES)
+    when_resell = forms.ChoiceField(choices=RESELL_WHEN_CHOICES, required=False)
+    amount_resell = forms.IntegerField(required=False)
 
     class Meta:
         model = Event
         fields = '__all__'
+
+
+    # Overriding save allows us to process the value of the servers, variables and required packages.
+    def save(self, commit):
+        # Get the unsave Package instance
+        instance = forms.ModelForm.save(self, False)
+
+        print("Hello World")
+
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
@@ -37,8 +72,11 @@ class EventForm(ModelForm):
         self.fields['start_date'].label = 'Date'
         self.fields['end_time'].label = 'Time'
         self.fields['end_date'].label = 'Date'
-        self.fields['privacy'].label = 'Make this event private (Only people with the link can view it)'
+        self.fields['privacy'].label = 'Privacy'
         self.fields['show_remaining_tickets'].label = 'Show the number of remaining tickets on the event page'
+        self.fields['allow_resell'].label = 'Would you like event goers to be able to resell their tickets on Ticketr?'
+        self.fields['when_resell'].label = 'When would you like event goers to be able to resell their tickets?'
+        self.fields['amount_resell'].label = 'How many tickets should be sold before reselling can occur?'
 
         # Fill in the persons organiser accounts
         self.fields['organiser'].queryset = Organiser.objects.all().filter(user=self.request.user)
@@ -54,9 +92,9 @@ class EventForm(ModelForm):
             ),
             Row(
                 Div(Field('start_date', css_class='form-control'), css_class='form-group col-md-3'),
-                Div(Field('start_time', css_class='form-control'), css_class='form-group col-md-3'),
+                Div(Field('start_time', css_class='form-control', placeholder="23:00"), css_class='form-group col-md-3'),
                 Div(Field('end_date', css_class='form-control'), css_class='form-group col-md-3'),
-                Div(Field('end_time', css_class='form-control'), css_class='form-group col-md-3'),
+                Div(Field('end_time', css_class='form-control', placeholder="23:00"), css_class='form-group col-md-3'),
             ),
             HTML("""<br/><h2><span class="badge badge-dark">2</span> Make it pretty & get some more information</span></h2><hr/>"""),
             Row(
@@ -73,6 +111,13 @@ class EventForm(ModelForm):
                  </div>
             '''), css_class='form-group', css_id='dropdownoption'),
             HTML("""<br/><h2><span class="badge badge-dark">4</span> Finally, some additional settings.</span></h2><hr/>"""),
-            Div(Field('privacy', css_class='form-check-input'), css_class='form-check mb-2 mr-sm-2'),
+            Div(Field('privacy', css_class='form-control'), css_class='form-group'),
             Div(Field('show_remaining_tickets', css_class='form-check-input'), css_class='form-check mb-2 mr-sm-2'),
+            HTML("""<br/><strong>Resell Settings:</strong><hr/>"""),
+            Div(Field('allow_resell', css_class='form-control'), css_class='form-group'),
+            Div(Field('when_resell', css_class='form-control'), css_class='form-group'),
+            Div(Field('amount_resell', css_class='form-control'), css_class='form-group'),
+            HTML("""<br/><div class="card text-center"><div class="card-body"><h1>Awesome! Let's make it official.</h1>"""),
+            Div(Submit('submit', 'Make Event Live', css_class='btn btn-success btn-block btn-lg')),
+            HTML("""</div></div>""")
         )
