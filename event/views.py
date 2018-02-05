@@ -1,3 +1,4 @@
+import datetime
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -31,7 +32,7 @@ class CreateEvent(View):
             }
             return TemplateResponse(request, "create-event.html", context)
         else:
-            return redirect('login')
+            return redirect('/account/sign-in')
 
     def post(self, request):
         if request.user.is_authenticated:
@@ -46,8 +47,6 @@ class CreateEvent(View):
                 quantity = request.POST.getlist('quantity')
                 price = request.POST.getlist('price')
 
-                print(name)
-
                 # Check if any of those lists are empty
                 if not name or not quantity or not price:
                     messages.error(request, "You must add at least one ticket.")
@@ -55,14 +54,25 @@ class CreateEvent(View):
                 else:
                     # Lets loop through each list and see if any of the spaces are empty. If so raise an error
 
+                    # We need to get each ticket and save it to the db
                     for i in range(len(name)):
                         if not name[i] or not quantity[i] or not price[i]:
                             messages.error(request, "There seems to be a problem with a name, quantity or price of one of your tickets.")
                             return TemplateResponse(request, "create-event.html", {'form': form})
 
-                    # We need to get each ticket and save it to the db
+                    # Check if the event date and time are not already over
+                    if event.start_date < datetime.datetime.now().date():
+                        messages.error(request, "Your start date cannot have already happened.")
+                        return TemplateResponse(request, "create-event.html", {'form': form})
+                    else:
+                        # Check if the start date is past the end date
+                        if event.start_date > event.end_date:
+                            messages.error(request, "Your start date is ahead of your end date.")
+                            return TemplateResponse(request, "create-event.html", {'form': form})
+                        else:
+                            event.save()
 
-                    event.save()
+                    # event.save()
 
                     for i in range(len(name)):
                         ticket = Ticket(name=name[i],
@@ -77,4 +87,35 @@ class CreateEvent(View):
             else:
                 return TemplateResponse(request, "create-event.html", {'form': form})
         else:
-            return redirect('login')
+            return redirect('/account/sign-in')
+
+
+class ManageEvents(View):
+
+    def get(self, request):
+        if request.user.is_authenticated:
+            # Get all of the users organiser profiles
+            organiser_profiles = Organiser.objects.all().filter(user=request.user)
+
+            # Now get all of the events belonging to those organisers.
+            events = Event.objects.all().filter(organiser__in=organiser_profiles)
+
+            context = {
+                'events': events
+            }
+
+            return render(request, 'manage-events.html', context)
+        else:
+            return redirect('/account/sign-in')
+
+    def post(self, request):
+        pass
+
+
+class ViewEvent(View):
+
+    def get(self, request, event_id):
+        print(event_id)
+
+    def post(self, request):
+        pass

@@ -1,3 +1,4 @@
+import datetime
 from crispy_forms.helper import FormHelper
 from django.forms import ModelForm
 from crispy_forms import helper
@@ -37,6 +38,7 @@ class EventForm(ModelForm):
     ))
     end_time = forms.TimeField()
     image = forms.ImageField()
+    background_colour = forms.CharField()
     organiser = forms.ModelChoiceField(queryset=None)
     description = forms.CharField(widget=forms.Textarea)
     privacy = forms.ChoiceField(choices=PRIVACY)
@@ -70,6 +72,10 @@ class EventForm(ModelForm):
         self.fields['when_resell'].label = 'When would you like event goers to be able to resell their tickets?'
         self.fields['amount_resell'].label = 'How many tickets should be sold before reselling can occur?'
 
+        self.fields['background_colour'].widget.attrs.update({
+            'type': 'color',
+        })
+
         # Fill in the persons organiser accounts
         self.fields['organiser'].queryset = Organiser.objects.all().filter(user=self.request.user)
 
@@ -90,9 +96,10 @@ class EventForm(ModelForm):
             ),
             HTML("""<br/><h2><span class="badge badge-dark">2</span> Make it pretty & get some more information</span></h2><hr/>"""),
             Row(
-                Div(Field('image', css_class='form-control'), css_class='form-group col-md-4'),
+                Div(Field('image', css_class='form-control'), HTML("""<br/>"""), Field('background_colour', css_class='form-control'), css_class='form-group col-md-4'),
                 Div(Field('description', css_class='form-control'), css_class='form-group col-md-8'),
             ),
+
             HTML("""<div class="float-right" style="padding-bottom: 1%"><a href="" class="btn btn-success btn-sm">Create Organiser</a></div>"""),
             Div(Field('organiser', css_class='form-control'), css_class='form-group'),
             HTML("""<br/><h2><span class="badge badge-dark">3</span> Let's create some tickets</span></h2><hr/>"""),
@@ -113,3 +120,16 @@ class EventForm(ModelForm):
             Div(Submit('submit', 'Make Event Live', css_class='btn btn-success btn-block btn-lg')),
             HTML("""</div></div>""")
         )
+
+
+    def clean(self):
+        # Make sure that if the when resell is set to an amount then an amount is provided.
+        when_resell = self.cleaned_data.get('when_resell', False)
+
+        if when_resell == 'A':
+            if self.cleaned_data.get('amount_resell') is None:
+                self._errors['amount_resell'] = self.error_class([
+                    'You must provide an amount of tickets'
+                ])
+
+        return self.cleaned_data

@@ -73,8 +73,6 @@ class SignUp(View):
                     return redirect('/account/sign-up')
 
 
-
-
 class SignOut(View):
 
     def get(self, request):

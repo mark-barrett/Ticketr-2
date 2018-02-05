@@ -30,6 +30,7 @@ class Event(models.Model):
     end_date = models.DateField()
     end_time = models.TimeField()
     image = models.ImageField(upload_to='static/event_images', blank=True, null=True)
+    background_colour = models.CharField(max_length=7)
     description = models.TextField()
     organiser = models.ForeignKey(Organiser)
     privacy = models.CharField(max_length=1)
