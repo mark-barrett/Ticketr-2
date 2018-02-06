@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Ticketr - Event{% endblock %}
+
+{% block content %}
+
+{% include 'menu.html' %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} text-center" style="margin-bottom: 0px" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% if event.organiser.user == request.user %}
+<div class="card text-white bg-success mb-3" style="border-radius: 0px;">
+    <div class="card-body" style="padding: 10px;">
+        <div class="container">
+            <p class="card-text">This is one of your events.</p>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="event_background" style="background: {{ event.background_colour }}">
+</div>
+
+<div class="event_display">
+    <div class="row">
+        <div class="col-md-1">
+
+        </div>
+        <div class="col-md-4">
+            <div class="card event_info">
+                <div class="card-body">
+                    <h2>{{event.title}}</h2>
+                    <p>By: {{event.organiser.name}}</p>
+                    <a href="blah" class="btn btn-success btn-block">{% if free_event is True %}Register{% else %}Get Tickets{% endif %}</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="event_image">
+                <img src="/{{event.image}}" style="border-radius: 5px;" width="100%"/>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+
+        </div>
+    </div>
+</div>
+
+
+
+
+    <br/>
+    <div class="row">
+        <div class="col-md-1">
+
+        </div>
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>Date:</strong>
+                            <p>{{event.start_date}} @ {{event.start_time}} - {{event.end_date}} @ {{event.end_time}}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Location:</strong>
+                            <p>{{event.location}}</p>
+                        </div>
+                        <div class="col-md-4">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">
+
+        </div>
+    </div>
+
+
+{% endblock content %}

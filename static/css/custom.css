@@ -30,6 +30,28 @@
     margin-top: 6%;
 }
 
+.event_image {
+    border-radius: 5px;
+    margin-top: 3.5%
+}
+
+.event_background {
+    padding-top: 8%;
+    padding-bottom: 15%;
+    position: absolute;
+    width: 100%
+}
+
+.event_info {
+    position: absolute;
+    bottom: 0;
+    width: 95%
+}
+
+.event_display {
+
+}
+
 .search_event {
     padding-top: 15%;
 }

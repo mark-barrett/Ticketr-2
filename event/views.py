@@ -115,7 +115,24 @@ class ManageEvents(View):
 class ViewEvent(View):
 
     def get(self, request, event_id):
-        print(event_id)
+
+        event = Event.objects.get(id=event_id)
+
+        tickets = Ticket.objects.all().filter(event=event)
+
+        for ticket in tickets:
+            if ticket.price > 0:
+                free_event = False
+            else:
+                free_event = True
+
+        context = {
+            'event': event,
+            'tickets': tickets,
+            'free_event': free_event
+        }
+
+        return render(request, 'view-event.html', context)
 
     def post(self, request):
         pass
