@@ -35,7 +35,7 @@
             <div class="card event_info">
                 <div class="card-body">
                     <h2>{{event.title}}</h2>
-                    <p>By: {{event.organiser.name}}</p>
+                    <p>By: <a href="">{{event.organiser.name}}</a></p>
 
                     <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#exampleModal">
                         {% if free_event is True %}Register{% else %}Get Tickets{% endif %}
