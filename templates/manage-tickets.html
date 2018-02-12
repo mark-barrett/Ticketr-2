@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Ticketr - Manage Tickets{% endblock %}
+
+{% block content %}
+
+{% include 'menu.html' %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} text-center" style="margin-bottom: 0px" role="alert">
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+<div class="small_background">
+    <div class="container text-white">
+        <h2>
+            {{ event.title }} <span class="badge badge-success">Live</span>
+            {% if event.privacy == 'P' %}
+            <span class="badge badge-secondary">Public</span>
+            {% else %}
+            <span class="badge badge-dark">Unlisted</span>
+            {% endif %}
+        </h2>
+    </div>
+</div>
+<div class="container small_background_container">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    {% include 'manage-event-menu.html' with active='tickets' %}
+                </div>
+                <div class="col-md-9">
+                    <div class="float-right">
+                        <a href="blah" class="btn btn-success">Create Ticket</a>
+                    </div>
+                    <h3>Tickets</h3>
+                    <hr/>
+                    <table class="table">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Quantity Sold</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for ticket in tickets %}
+                            <tr>
+                                <th>{{ ticket.name }}</th>
+                                <td>&euro;{{ ticket.price }}</td>
+                                <td>{{ ticket.quantity }}</td>
+                                <td>0</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/><br/>
+</div>
+
+{% endblock content %}

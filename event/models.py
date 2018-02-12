@@ -12,7 +12,7 @@ class Organiser(models.Model):
     twitter = models.CharField(max_length=256, blank=True)
     background_colour = models.CharField(max_length=10, default='#D3D3D3', blank=True)
     text_color = models.CharField(max_length=10, default='#000000', blank=True)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = 'Organisers'
@@ -32,7 +32,7 @@ class Event(models.Model):
     image = models.ImageField(upload_to='static/event_images', blank=True, null=True)
     background_colour = models.CharField(max_length=7)
     description = models.TextField()
-    organiser = models.ForeignKey(Organiser)
+    organiser = models.ForeignKey(Organiser, on_delete=models.CASCADE)
     privacy = models.CharField(max_length=1)
     show_remaining_tickets = models.BooleanField()
     allow_resell = models.CharField(max_length=1)
@@ -56,7 +56,7 @@ class Ticket(models.Model):
     sales_start_time = models.DateTimeField(blank=True, null=True)
     sales_end_date = models.DateField(blank=True, null=True)
     sales_end_time = models.DateTimeField(blank=True, null=True)
-    event = models.ForeignKey(Event)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = 'Tickets'
