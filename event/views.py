@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse
 from django.views import View
 
-from event.forms import EventForm
+from event.forms import EventForm, TicketForm
 from event.models import *
 
 from django.contrib import messages
@@ -172,6 +172,29 @@ class ManageTickets(View):
                 }
 
                 return render(request, 'manage-tickets.html', context)
+            else:
+                return redirect('/event/my-events')
+        else:
+            return redirect('/account/sign-in')
+
+
+class CreateTicket(View):
+
+    model = Ticket
+    fields = '__all__'
+    template_name = 'create-ticket.html'
+
+    def get(self, request, event_id):
+        if request.user.is_authenticated:
+
+            event = Event.objects.get(id=event_id)
+
+            if event.organiser.user == request.user:
+                context = {
+                    'event': event,
+                    'form': TicketForm(request=request)
+                }
+                return TemplateResponse(request, "create-ticket.html", context)
             else:
                 return redirect('/event/my-events')
         else:
