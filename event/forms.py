@@ -11,23 +11,14 @@ class TicketForm(ModelForm):
     name = forms.CharField(max_length=256)
     quantity = forms.IntegerField()
     price = forms.DecimalField(decimal_places=2, max_digits=6)
-    sales_start_date = forms.DateField(widget=forms.TextInput(
-        attrs={'type': 'date'}
-    ))
-    sales_start_time = forms.TimeField()
-    sales_end_date = forms.DateField(widget=forms.TextInput(
-        attrs={'type': 'date'}
-    ))
-    sales_end_time = forms.TimeField()
-
 
     class Meta:
         model = Ticket
         fields = '__all__'
 
-
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
+        self.event = kwargs.pop('event', None)
         super(TicketForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = 'post'
@@ -41,18 +32,6 @@ class TicketForm(ModelForm):
             Row(
                 Div(Field('price', css_class='form-control'), css_class='form-group col-md-6'),
                 Div(Field('quantity', css_class='form-control'), css_class='form-group col-md-6'),
-            ),
-            Row(
-                Div(HTML("""<h5><i class="fa fa-hourglass-start" aria-hidden="true"></i> Start</h5><hr/>"""),
-                    css_class='col-md-6'),
-                Div(HTML("""<h5><i class="fa fa-hourglass-end" aria-hidden="true"></i> End</h5><hr/>"""),
-                    css_class='col-md-6')
-            ),
-            Row(
-                Div(Field('sales_start_date', css_class='form-control'), css_class='form-group col-md-3'),
-                Div(Field('sales_start_time', css_class='form-control', placeholder="23:00"), css_class='form-group col-md-3'),
-                Div(Field('sales_end_date', css_class='form-control'), css_class='form-group col-md-3'),
-                Div(Field('sales_end_time', css_class='form-control', placeholder="23:00"), css_class='form-group col-md-3'),
             ),
             Div(Submit('submit', 'Create Ticket', css_class='btn btn-success btn-block')),
         )
@@ -171,7 +150,6 @@ class EventForm(ModelForm):
             Div(Submit('submit', 'Make Event Live', css_class='btn btn-success btn-block btn-lg')),
             HTML("""</div></div>""")
         )
-
 
     def clean(self):
         # Make sure that if the when resell is set to an amount then an amount is provided.

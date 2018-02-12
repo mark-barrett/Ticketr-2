@@ -57,7 +57,7 @@ class Ticket(models.Model):
     sales_start_time = models.DateTimeField(blank=True, null=True)
     sales_end_date = models.DateField(blank=True, null=True)
     sales_end_time = models.DateTimeField(blank=True, null=True)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         verbose_name_plural = 'Tickets'

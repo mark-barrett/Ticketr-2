@@ -200,6 +200,30 @@ class CreateTicket(View):
         else:
             return redirect('/account/sign-in')
 
+    def post(self, request, event_id):
+        if request.user.is_authenticated:
+
+            event = Event.objects.get(id=event_id)
+
+            if event.organiser.user == request.user:
+                form = TicketForm(request.POST, request.FILES, request=request, event=event)
+                if form.is_valid():
+                    ticket = form.save(commit=False)
+                    # commit=False tells Django that "Don't send this to database yet.
+                    # I have more things I want to do with it."
+
+                    ticket.event = event
+
+                    ticket.save()
+
+                    messages.success(request, "Event successfully created.")
+                    return redirect('/event/manage/tickets/'+event_id)
+                else:
+                    print(form.errors)
+                    return TemplateResponse(request, "create-ticket.html", {'form': form, 'event': event})
+        else:
+            return redirect('/account/sign-in')
+
 
 class ListEvents(View):
 
@@ -210,3 +234,4 @@ class ListEvents(View):
         }
 
         return render(request, 'list-events.html', context)
+
