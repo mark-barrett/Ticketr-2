@@ -10,9 +10,11 @@
 
             </ul>
             <ul class="navbar-nav ml-auto">
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search Events" aria-label="Search">
+                <form class="form-inline my-2 my-lg-0" action="/event/list/" method="post">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search Events" aria-label="Search" name="search_query">
+                    {% csrf_token %}
                 </form>
+
                 <li class="nav-item">
                     <a class="nav-link text-white" href="#">Browse Events</a>
                 </li>
