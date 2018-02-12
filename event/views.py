@@ -177,3 +177,13 @@ class ManageTickets(View):
         else:
             return redirect('/account/sign-in')
 
+
+class ListEvents(View):
+
+    def get(self,request):
+
+        context = {
+            'events': Event.objects.all()
+        }
+
+        return render(request, 'list-events.html', context)
