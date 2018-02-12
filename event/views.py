@@ -136,3 +136,14 @@ class ViewEvent(View):
 
     def post(self, request):
         pass
+
+
+class ListEvents(View):
+
+    def get(self,request):
+
+        context = {
+            'events': Event.objects.all()
+        }
+
+        return render(request, 'list-events.html', context)
