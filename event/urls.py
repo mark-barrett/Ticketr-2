@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^create/', event.views.CreateEvent.as_view(), name='create-event'),
     url(r'^my-events/', event.views.MyEvents.as_view(), name='my-events'),
     url(r'^manage/(?P<event_id>[0-9]+)$', event.views.ManageEvent.as_view(), name='manage-event'),
+    url(r'^manage/tickets/(?P<event_id>[0-9]+)$', event.views.ManageTickets.as_view(), name='manage-tickets'),
     url(r'(?P<event_id>[0-9]+)$', event.views.ViewEvent.as_view(), name='view-event'),
 ]

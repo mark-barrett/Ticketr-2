@@ -148,10 +148,30 @@ class ManageEvent(View):
 
             if event.organiser.user == request.user:
                 context = {
-                    'event': Event.objects.get(id=event_id)
+                    'event': event
                 }
 
                 return render(request, 'manage-event.html', context)
+            else:
+                return redirect('/event/my-events')
+        else:
+            return redirect('/account/sign-in')
+
+
+class ManageTickets(View):
+
+    def get(self, request, event_id):
+        if request.user.is_authenticated:
+
+            event = Event.objects.get(id=event_id)
+
+            if event.organiser.user == request.user:
+                context = {
+                    'event': event,
+                    'tickets': Ticket.objects.all().filter(event=event)
+                }
+
+                return render(request, 'manage-tickets.html', context)
             else:
                 return redirect('/event/my-events')
         else:
