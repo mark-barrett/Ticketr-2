@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Ticketr - Manage Event{% endblock %}
+
+{% block content %}
+
+{% include 'menu.html' %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} text-center" style="margin-bottom: 0px" role="alert">
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+<div class="small_background">
+    <div class="container text-white">
+        <h2>
+            {{ event.title }} <span class="badge badge-success">Live</span>
+            {% if event.privacy == 'P' %}
+                <span class="badge badge-secondary">Public</span>
+            {% else %}
+                <span class="badge badge-dark">Unlisted</span>
+            {% endif %}
+        </h2>
+    </div>
+</div>
+<div class="container small_background_container">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    {% include 'manage-event-menu.html' with active='dashboard' %}
+                </div>
+                <div class="col-md-9">
+                    <h3>Dashboard</h3>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    Tickets Sold:
+                                </div>
+                                <div class="card-body">
+                                    <div class="progress">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">30/275</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    Event Privacy:
+                                </div>
+                                <div class="card-body">
+                                    {% if event.privacy == 'P' %}
+                                        This event is public which means it can be viewed by anybody on the Ticketr website. It is also listed.
+                                    {% else %}
+                                        This event is private and unlisted meaning only people with the link can view it. It is not listed.
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="card">
+                        <div class="card-header">
+                            Recent Orders
+                        </div>
+                        <div class="card-body">
+                            Blah
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/><br/>
+</div>
+
+{% endblock content %}

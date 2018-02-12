@@ -90,7 +90,7 @@ class CreateEvent(View):
             return redirect('/account/sign-in')
 
 
-class ManageEvents(View):
+class MyEvents(View):
 
     def get(self, request):
         if request.user.is_authenticated:
@@ -104,7 +104,7 @@ class ManageEvents(View):
                 'events': events
             }
 
-            return render(request, 'manage-events.html', context)
+            return render(request, 'my-events.html', context)
         else:
             return redirect('/account/sign-in')
 
@@ -113,6 +113,7 @@ class ManageEvents(View):
 
 
 class ViewEvent(View):
+
 
     def get(self, request, event_id):
 
@@ -136,3 +137,23 @@ class ViewEvent(View):
 
     def post(self, request):
         pass
+
+
+class ManageEvent(View):
+
+    def get(self, request, event_id):
+        if request.user.is_authenticated:
+
+            event = Event.objects.get(id=event_id)
+
+            if event.organiser.user == request.user:
+                context = {
+                    'event': Event.objects.get(id=event_id)
+                }
+
+                return render(request, 'manage-event.html', context)
+            else:
+                return redirect('/event/my-events')
+        else:
+            return redirect('/account/sign-in')
+

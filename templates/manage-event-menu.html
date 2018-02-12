@@ -1,0 +1,20 @@
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item">
+        <a class="nav-link {% if active == 'dashboard' %}active{% endif %}" href="#"><i class="fa fa-sliders"></i> Dashboard</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if active == 'orders' %}active{% endif %}" href="#"><i class="fa fa-eur"></i> Orders</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if active == 'tickets' %}active{% endif %}" href="#"><i class="fa fa-ticket"></i> Tickets</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if active == 'guest-list' %}active{% endif %}" href="#"><i class="fa fa-user"></i> Guest List</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if active == 'check-in' %}active{% endif %}" href="#"><i class="fa fa-check"></i> Check-In</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/event/{{event.id}}"><i class="fa fa-eye"></i> View Event</a>
+    </li>
+</ul>
