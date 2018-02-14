@@ -23,5 +23,5 @@ urlpatterns = [
     url(r'^create/', event.views.CreateEvent.as_view(), name='create-event'),
     url(r'^manage/', event.views.ManageEvents.as_view(), name='manage-events'),
     url(r'(?P<event_id>[0-9]+)$', event.views.ViewEvent.as_view(), name='view-event'),
-    url(r'^list/',event.views.ListEvents.as_view(), name='list-events')
+    url(r'^browse/',event.views.ListEvents.as_view(), name='browse-events')
 ]
