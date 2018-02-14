@@ -24,5 +24,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^account/', include('account.urls')),
     url(r'^event/', include('event.urls')),
-    url(r'^order/(?P<ticket_id>[0-9]+)$', ticket.views.Order.as_view(), name='order'),
+    url(r'^order/', ticket.views.Order.as_view(), name='order'),
 ]

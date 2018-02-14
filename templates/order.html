@@ -14,7 +14,6 @@
 {% endif %}
 <div class="small_background">
     <div class="container text-white">
-
         <h2>
             Order
         </h2>
@@ -25,9 +24,9 @@
         <div class="row">
             <div class="col-md-7 py-2">
                 <div class="h-100">
-                    <h1>{{ ticket.event.title }}</h1>
-                    <p>{{ ticket.event.start_date }} @ {{ ticket.event.start_time }} - {{ ticket.event.end_date }} @ {{ ticket.event.end_time }}<br/>
-                        {{ ticket.event.location }}</p>
+                    <h1>{{ event.title }}</h1>
+                    <p>{{ event.start_date }} @ {{ event.start_time }} - {{ event.end_date }} @ {{ event.end_time }}<br/>
+                        {{ event.location }}</p>
 
                     <div style="bottom: 0">
                         <div class="alert alert-warning"><h6>Your held tickets will be released to the public in <span id="time">10:00</span> <small>minutes</small></h6></div>
@@ -36,7 +35,7 @@
             </div>
             <div class="col-md-5 py-2">
                 <div class="h-100">
-                    <img src="/{{ticket.event.image}}" width="100%" style="border-radius: 5px; margin-top: -50px; bottom: 0"/>
+                    <img src="/{{event.image}}" width="100%" style="border-radius: 5px; margin-top: -50px; bottom: 0"/>
                 </div>
             </div>
         </div>
@@ -48,7 +47,48 @@
             <div class="card">
                 <div class="card-header">Your Order</div>
                 <div class="card-body">
-
+                    <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Type</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Fee</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Sub Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for ticket in ticket_list %}
+                            <tr>
+                                <td>{{ ticket.ticket.name}}</td>
+                                <td>{{ ticket.ticket.price }}</td>
+                                <td>&euro;{{ ticket.fees }}</td>
+                                <td>{{ ticket.quantity }}</td>
+                                <td>&euro;{{ ticket.sub_total }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <br/>
+            <div class="card">
+                <div class="card-header">
+                    Your Details
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="first_name" placeholder="First Name">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="last_name" placeholder="Last Name">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -57,11 +97,11 @@
                 <div class="card-header">Organiser</div>
                 <div class="card-body">
                     <div class="float-right">
-                        <h3>{{ticket.event.organiser.name}}</h3>
+                        <h3>{{event.organiser.name}}</h3>
                         <hr/>
                         <a href="#" class="btn btn-dark">Profile</a> <a href="#" class="btn btn-dark">Contact</a>
                     </div>
-                    <img src="/{{ticket.event.organiser.image}}" height="120px" style="border-radius: 5px;"/>
+                    <img src="/{{event.organiser.image}}" height="120px" style="border-radius: 5px;"/>
                 </div>
             </div>
         </div>

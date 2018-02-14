@@ -63,4 +63,4 @@ class Ticket(models.Model):
         verbose_name_plural = 'Tickets'
 
     def __str__(self):
-        return "Name:"+self.name+" Event: "+self.event.title+" ID:"+str(self.id)
+        return "Name:"+self.name+" ID:"+str(self.id)
