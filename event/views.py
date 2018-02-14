@@ -1,4 +1,6 @@
 import datetime
+
+from django.db.models import Q
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -227,7 +229,7 @@ class CreateTicket(View):
 
 class ListEvents(View):
 
-    def get(self,request):
+    def get(self, request):
 
         context = {
             'events': Event.objects.all()
@@ -235,3 +237,11 @@ class ListEvents(View):
 
         return render(request, 'list-events.html', context)
 
+    def post(self, request):
+        search_query = request.POST['search_query']
+
+        context = {
+            'events': Event.objects.all().filter(Q(title__contains=search_query) | Q(location__contains=search_query))
+        }
+
+        return render(request, 'list-events.html', context)
