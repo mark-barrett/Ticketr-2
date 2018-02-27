@@ -162,11 +162,15 @@ class ConfirmOrder(View):
 
                                 order_ticket.save()
 
+                                context = {
+
+                                }
+
+                                return render(request, 'confirm-order.html', context)
+
                     else:
                         messages.error(request, 'There was an error signing up')
                         return redirect('/account/sign-up')
-
-
 
         else:
             # The user does not have to be registered
@@ -232,4 +236,9 @@ class ConfirmOrder(View):
 
                     order_ticket.save()
 
+                    context = {
+
+                    }
+
+                    return render(request, 'confirm-order.html', context)
 
