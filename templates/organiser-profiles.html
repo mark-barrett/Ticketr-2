@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Ticketr - organiser-profiles{% endblock %}
+
+{% block content %}
+
+{% include 'menu.html' %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} text-center" style="margin-bottom: 0px" role="alert">
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+<div class="small_background">
+    <div class="container text-white">
+        <h2>Organisers Profile</h2>
+    </div>
+</div>
+<div class="container small_background_container">
+    <div class="card">
+        <div class="card-body">
+
+            <div class="row">
+                {% for organiser in organisers %}
+                <div class="col-md-4">
+                     <div class="card" style="with:18rem">
+                         <div class="row">
+                             <div class="col-md-5">
+                                 <img src="/{{organiser.image}}" alt="card image cap" width="150px"/>
+                             </div>
+                             <div class="col-md-7">
+                                  <h5>{{organiser.name}}</h5>
+                                 <hr>
+                                 <p><h6>{{ organiser.tagline }}</h6>
+                                 <div class="float-right">
+                                 <a href="/event/organisers-profile/{{organiser.id}}" class="btn btn-success">profile</a>
+                                 </div>
+                             </div>
+                         </div>
+
+                     </div>
+
+                </div>
+
+                 {% endfor %}
+            </div>
+        </div>
+    </div>
+    <br/><br/>
+</div>
+
+{% endblock content %}

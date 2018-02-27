@@ -198,3 +198,33 @@ class ListEvents(View):
             'events': Event.objects.all().filter(Q(title__contains=search_query) | Q(location__contains=search_query))
         }
 
+<<<<<<< HEAD
+=======
+        return render(request, 'list-events.html',context)
+
+
+class OrganiserProfiles(View):
+
+    def get(self, request):
+
+        user = User.objects.get(id=request.user.id)
+
+        context = {
+            'organisers': Organiser.objects.all().filter(user=user)
+        }
+        return render(request, 'organiser-profiles.html', context)
+
+class OrganisersProfile(View):
+
+    def get (self, request, organiser_id):
+
+        organiser = Organiser.objects.get(id=organiser_id)
+
+        context = {
+            'organiser': organiser,
+            'events': Event.objects.all().filter(organiser=organiser)
+        }
+
+        return render(request, 'organisers-profile.html', context)
+        # Organiser.objects.get(id=organiser_id)
+>>>>>>> c17595e4271016a4eef4627106f179d677e58408

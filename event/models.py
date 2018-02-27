@@ -5,6 +5,7 @@ from PIL import Image
 class Organiser(models.Model):
 
     name = models.CharField(max_length=256)
+    tagline = models.TextField(max_length=64)
     about = models.TextField(blank=True)
     image = models.ImageField(upload_to='static/organiser_images', blank=True, null=True)
     website = models.CharField(max_length=256, blank=True)
