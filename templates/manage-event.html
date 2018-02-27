@@ -38,11 +38,11 @@
                         <div class="col-md-8">
                             <div class="card">
                                 <div class="card-header">
-                                    Tickets Sold:
+                                    Tickets Sold: {{tickets_sold}}/{{available_tickets}}
                                 </div>
                                 <div class="card-body">
                                     <div class="progress">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">30/275</div>
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: {{percentage_sold}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{tickets_sold}}/{{available_tickets}}</div>
                                     </div>
                                 </div>
                             </div>
@@ -68,7 +68,28 @@
                             Recent Orders
                         </div>
                         <div class="card-body">
-                            Blah
+                            {% if recent_orders %}
+                            <table class="table">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Order Number</th>
+                                    <th scope="col">User</th>
+                                    <th scope="col">Amount</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in recent_orders %}
+                                    <tr>
+                                        <td><a href="/event/manage/order/{{order.order_number}}">{{order.order_number}}</a></td>
+                                        <td>{{order.user.first_name}} {{order.user.last_name}}</td>
+                                        <td>&euro;{{order.payment_amount}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                            <p>There has not been any orders yet.</p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

@@ -12,6 +12,8 @@ from event.models import *
 
 from django.contrib import messages
 
+from ticket.models import Order, OrderTicket
+
 
 class Home(View):
 
@@ -148,9 +150,26 @@ class ManageEvent(View):
 
             event = Event.objects.get(id=event_id)
 
+            tickets_sold = OrderTicket.objects.all().filter(event=event).count()
+
+            # Get the available tickets in the event
+            available_tickets = 0
+
+            tickets = Ticket.objects.all().filter(event=event)
+
+            for ticket in tickets:
+                available_tickets += ticket.quantity
+
+            # Calculate the percentage sold for the bar.
+            percentage_sold = (100/available_tickets) * tickets_sold
+
             if event.organiser.user == request.user:
                 context = {
-                    'event': event
+                    'event': event,
+                    'recent_orders': Order.objects.all().filter(event=event, status=True).order_by('-id')[:4],
+                    'tickets_sold': tickets_sold,
+                    'available_tickets': available_tickets,
+                    'percentage_sold': percentage_sold
                 }
 
                 return render(request, 'manage-event.html', context)
