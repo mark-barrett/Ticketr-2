@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from PIL import Image
 
+
 class Organiser(models.Model):
 
     name = models.CharField(max_length=256)
@@ -57,10 +58,10 @@ class Ticket(models.Model):
     sales_start_time = models.DateTimeField(blank=True, null=True)
     sales_end_date = models.DateField(blank=True, null=True)
     sales_end_time = models.DateTimeField(blank=True, null=True)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         verbose_name_plural = 'Tickets'
 
     def __str__(self):
-        return "Name:"+self.name+" Event: "+self.event.title+" ID:"+str(self.id)
+        return "Name:"+self.name+" ID:"+str(self.id)

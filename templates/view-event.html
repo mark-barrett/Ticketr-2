@@ -157,13 +157,15 @@
                 </ul>
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-
-                        {% for ticket in tickets %}
+                        <form name="tickets" action="/order/" method="post">
+                            {% for ticket in tickets %}
                             <div class="card border-white bg-light" style="padding-left: 35px; padding-right: 35px;">
                                 <div class="card-body">
                                     <div class="float-right">
                                         <div class="form-group">
-                                            <select name="quantity" class="form-control">
+                                            <input name="tickets" value="{{ticket.id}}" type="hidden">
+                                            <select name="quantities" class="form-control">
+                                                <option>0</option>
                                                 <option>1</option>
                                                 <option>2</option>
                                                 <option>3</option>
@@ -178,12 +180,15 @@
                                         </div>
                                     </div>
                                     <h3>{{ ticket.name }}<br/>
-                                    <small>{% if free_event is not True %}&euro;{{ticket.price}}{% endif %}</small></h3>
+                                        <small>{% if free_event is not True %}&euro;{{ticket.price}}{% endif %}</small></h3>
                                 </div>
                             </div>
                             <br/>
-                        {% endfor %}
-
+                            {% endfor %}
+                            <input type="hidden" value="{{ event.id }}" name="event">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-block btn-success">Checkout</button>
+                        </form>
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">...</div>
                 </div>

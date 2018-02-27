@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse
 from django.views import View
 
-from event.forms import EventForm
+from event.forms import EventForm, TicketForm
 from event.models import *
 
 from django.contrib import messages
@@ -180,6 +180,53 @@ class ManageTickets(View):
             return redirect('/account/sign-in')
 
 
+class CreateTicket(View):
+
+    model = Ticket
+    fields = '__all__'
+    template_name = 'create-ticket.html'
+
+    def get(self, request, event_id):
+        if request.user.is_authenticated:
+
+            event = Event.objects.get(id=event_id)
+
+            if event.organiser.user == request.user:
+                context = {
+                    'event': event,
+                    'form': TicketForm(request=request)
+                }
+                return TemplateResponse(request, "create-ticket.html", context)
+            else:
+                return redirect('/event/my-events')
+        else:
+            return redirect('/account/sign-in')
+
+    def post(self, request, event_id):
+        if request.user.is_authenticated:
+
+            event = Event.objects.get(id=event_id)
+
+            if event.organiser.user == request.user:
+                form = TicketForm(request.POST, request.FILES, request=request, event=event)
+                if form.is_valid():
+                    ticket = form.save(commit=False)
+                    # commit=False tells Django that "Don't send this to database yet.
+                    # I have more things I want to do with it."
+
+                    ticket.event = event
+
+                    ticket.save()
+
+                    messages.success(request, "Event successfully created.")
+                    return redirect('/event/manage/tickets/'+event_id)
+                else:
+                    print(form.errors)
+                    return TemplateResponse(request, "create-ticket.html", {'form': form, 'event': event})
+        else:
+            return redirect('/account/sign-in')
+
+
 class ListEvents(View):
 
     def get(self, request):
@@ -190,7 +237,6 @@ class ListEvents(View):
 
         return render(request, 'list-events.html', context)
 
-
     def post(self, request):
         search_query = request.POST['search_query']
 
@@ -198,8 +244,6 @@ class ListEvents(View):
             'events': Event.objects.all().filter(Q(title__contains=search_query) | Q(location__contains=search_query))
         }
 
-<<<<<<< HEAD
-=======
         return render(request, 'list-events.html',context)
 
 
@@ -214,6 +258,7 @@ class OrganiserProfiles(View):
         }
         return render(request, 'organiser-profiles.html', context)
 
+
 class OrganisersProfile(View):
 
     def get (self, request, organiser_id):
@@ -226,5 +271,3 @@ class OrganisersProfile(View):
         }
 
         return render(request, 'organisers-profile.html', context)
-        # Organiser.objects.get(id=organiser_id)
->>>>>>> c17595e4271016a4eef4627106f179d677e58408

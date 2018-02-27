@@ -17,10 +17,12 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 import event.views
+import ticket.views
 
 urlpatterns = [
     url(r'^$', event.views.Home.as_view(), name='home'),
     url(r'^admin/', admin.site.urls),
     url(r'^account/', include('account.urls')),
     url(r'^event/', include('event.urls')),
+    url(r'^order/', ticket.views.Order.as_view(), name='order'),
 ]

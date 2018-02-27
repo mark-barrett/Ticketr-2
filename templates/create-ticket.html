@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Ticketr - Create Ticket{% endblock %}
+
+{% block content %}
+
+{% include 'menu.html' %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} text-center" style="margin-bottom: 0px" role="alert">
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+<div class="small_background">
+    <div class="container text-white">
+        <h2>
+            {{ event.title }} <span class="badge badge-success">Live</span>
+            {% if event.privacy == 'P' %}
+            <span class="badge badge-secondary">Public</span>
+            {% else %}
+            <span class="badge badge-dark">Unlisted</span>
+            {% endif %}
+        </h2>
+    </div>
+</div>
+<div class="container small_background_container">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    {% include 'manage-event-menu.html' with active='tickets' %}
+                </div>
+                <div class="col-md-9">
+                    <h3>Create Ticket</h3>
+                    <hr/>
+                    {% load crispy_forms_tags %}
+                    {% crispy form form.helper %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/><br/>
+</div>
+
+{% endblock content %}

@@ -7,6 +7,36 @@ from django import forms
 from event.models import *
 
 
+class TicketForm(ModelForm):
+    name = forms.CharField(max_length=256)
+    quantity = forms.IntegerField()
+    price = forms.DecimalField(decimal_places=2, max_digits=6)
+
+    class Meta:
+        model = Ticket
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        self.event = kwargs.pop('event', None)
+        super(TicketForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.form_action = ''
+
+        forms.ModelForm.__init__(self, *args, **kwargs)
+
+        # Crispy forms layout
+        self.helper.layout = Layout(
+            Div(Field('name', css_class='form-control'), css_class='form-group'),
+            Row(
+                Div(Field('price', css_class='form-control'), css_class='form-group col-md-6'),
+                Div(Field('quantity', css_class='form-control'), css_class='form-group col-md-6'),
+            ),
+            Div(Submit('submit', 'Create Ticket', css_class='btn btn-success btn-block')),
+        )
+
+
 class EventForm(ModelForm):
 
     PRIVACY = (
@@ -120,7 +150,6 @@ class EventForm(ModelForm):
             Div(Submit('submit', 'Make Event Live', css_class='btn btn-success btn-block btn-lg')),
             HTML("""</div></div>""")
         )
-
 
     def clean(self):
         # Make sure that if the when resell is set to an amount then an amount is provided.
