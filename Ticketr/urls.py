@@ -25,4 +25,6 @@ urlpatterns = [
     url(r'^account/', include('account.urls')),
     url(r'^event/', include('event.urls')),
     url(r'^order/', ticket.views.Order.as_view(), name='order'),
+    url(r'^confirm-order', ticket.views.ConfirmOrder.as_view(), name='confirm-order'),
+
 ]

@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -55,3 +56,60 @@ class Order(View):
         else:
             messages.warning(request, "You must pick at least 1 ticket.")
             return redirect('/event/'+request.POST['event'])
+
+
+class ConfirmOrder(View):
+
+    def get(self, request):
+        return redirect('/')
+
+
+    def post(self, request):
+        # Check if the user needs to be registered
+        if request.POST['register'] == 'yes':
+            # The user does have to be registered
+            first_name = request.POST['first_name']
+            last_name = request.POST['last_name']
+            email = request.POST['email']
+            password = request.POST['password']
+
+            ticket_ids = request.POST.getlist('ticket_ids')
+            quantities = request.POST.getlist('ticket_quantities')
+
+            # So lets register them!
+            # Try find the user to see if they exist
+            try:
+                db_user = User.objects.get(username=email)
+
+                messages.error(request, 'A user with that email already exists.')
+                return redirect('/account/sign-up')
+            except:
+                user, created = User.objects.get_or_create(username=email, email=email)
+                if created:
+                    user.set_password(password)  # This line will hash the password
+
+                    user.first_name = first_name
+                    user.last_name = last_name
+
+                    user.save()
+
+                    # Check if the user has been saved.
+                    if user is not None:
+                        # Now they have been created then lets create orders that will then be confirmed later.
+                        # First we need to create an order entry.
+                        order = Order(
+
+                        )
+
+                    else:
+                        messages.error(request, 'There was an error signing up')
+                        return redirect('/account/sign-up')
+
+
+
+        else:
+            # The user does not have to be registered
+            ticket_ids = request.POST.getlist('ticket_ids')
+            quantities = request.POST.getlist('ticket_quantities')
+
+
