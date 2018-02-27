@@ -27,6 +27,8 @@ class Order(View):
             # Create ticket list for all of tickets.
             ticket_list = []
 
+            total = 0
+
             # Loop through the quantities and if they are 0 don't add them to the ticket list
             for index, quantity in enumerate(quantities):
                 if int(quantity) is not 0:
@@ -40,11 +42,13 @@ class Order(View):
                         'sub_total': round((float(db_ticket.price) + fees) * float(quantity), 2)
                     }
                     ticket_list.append(ticket_obj)
+                    total += round((float(db_ticket.price) + fees) * float(quantity), 2)
 
             # Hardcoded until post is ready
             context = {
                 'ticket_list': ticket_list,
-                'event': Ticket.objects.get(id=tickets[1]).event
+                'event': Ticket.objects.get(id=tickets[1]).event,
+                'total': total
             }
 
             return render(request, 'order.html', context)

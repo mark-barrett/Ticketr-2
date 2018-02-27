@@ -69,6 +69,9 @@
                         {% endfor %}
                         </tbody>
                     </table>
+                    <div class="float-right">
+                        <strong>Total: &euro;{{total}}</strong>
+                    </div>
                 </div>
             </div>
             <br/>
@@ -77,13 +80,69 @@
                     Your Details
                 </div>
                 <div class="card-body">
+                    {% if request.user.is_authenticated %}
+                        <p>Hey {{ request.user.first_name }}, you are logged in and your tickets will be linked to {{ request.user.email }}. <br/>Not you? <a href="/account/sign-out">Sign Out</a></p>
 
+                        <form name="order-tickets" action="/confirm-order" method="POST">
 
+                            {# Details to be sent to the confirm order page to construct the orders #}
+                            <input type="hidden" name="register" value="no">
 
+                            {% for ticket in ticket_list %}
+                            <input type="hidden" value="{{ticket.id}}" name="ticket_ids">
+                            <input type="hidden" value="{{ticket.quantity}}" name="ticket_quantities">
+                            {% endfor %}
 
+                            <input type="hidden" value="{{total}}" name="total">
 
+                            {% csrf_token %}
+                            <button class="btn btn-success btn-block" type="submit">Purchase with PayPal</button>
+
+                        </form>
+                    {% else %}
+                        <p>You need an account to receive tickets with Ticketr. Don't worry, one will be setup for you after purchase.</p>
+                        <form name="order-tickets" action="/confirm-order" method="POST">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="first_name">First Name:</label>
+                                        <input id="first_name" name="first_name" type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="last_name">Last Name:</label>
+                                        <input id="last_name" name="last_name" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input id="email" name="email" type="text" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password:</label>
+                                <input id="password" name="password" type="password" class="form-control">
+                            </div>
+
+                            {# Details to be sent to the confirm order page to construct the orders #}
+                            <input type="hidden" name="register" value="yes">
+
+                            {% for ticket in ticket_list %}
+                            <input type="hidden" value="{{ticket.id}}" name="ticket_ids">
+                            <input type="hidden" value="{{ticket.quantity}}" name="ticket_quantities">
+                            {% endfor %}
+
+                            <input type="hidden" value="{{total}}" name="total">
+
+                            {% csrf_token %}
+                            <button class="btn btn-success btn-block" type="submit">Register &amp; Purchase with PayPal</button>
+
+                        </form>
+                    {% endif %}
                 </div>
             </div>
+            <br/>
         </div>
         <div class="col-md-4">
             <div class="card">
