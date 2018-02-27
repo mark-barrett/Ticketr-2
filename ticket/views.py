@@ -163,7 +163,9 @@ class ConfirmOrder(View):
                                 order_ticket.save()
 
                                 context = {
-
+                                    'total': total,
+                                    'item_name': 'Ticket(s) for '+event.title,
+                                    'paypal_email': event.organiser.paypal_email
                                 }
 
                                 return render(request, 'confirm-order.html', context)
@@ -237,7 +239,9 @@ class ConfirmOrder(View):
                     order_ticket.save()
 
                     context = {
-
+                        'total': total,
+                        'item_name': 'Ticket(s) for ' + event.title,
+                        'paypal_email': event.organiser.paypal_email
                     }
 
                     return render(request, 'confirm-order.html', context)

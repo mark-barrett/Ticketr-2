@@ -12,6 +12,7 @@ class Organiser(models.Model):
     twitter = models.CharField(max_length=256, blank=True)
     background_colour = models.CharField(max_length=10, default='#D3D3D3', blank=True)
     text_color = models.CharField(max_length=10, default='#000000', blank=True)
+    paypal_email = models.CharField(max_length=256)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
