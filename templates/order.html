@@ -89,7 +89,7 @@
                             <input type="hidden" name="register" value="no">
 
                             {% for ticket in ticket_list %}
-                            <input type="hidden" value="{{ticket.id}}" name="ticket_ids">
+                            <input type="hidden" value="{{ticket.ticket.id}}" name="ticket_ids">
                             <input type="hidden" value="{{ticket.quantity}}" name="ticket_quantities">
                             {% endfor %}
 
@@ -129,7 +129,7 @@
                             <input type="hidden" name="register" value="yes">
 
                             {% for ticket in ticket_list %}
-                            <input type="hidden" value="{{ticket.id}}" name="ticket_ids">
+                            <input type="hidden" value="{{ticket.ticket.id}}" name="ticket_ids">
                             <input type="hidden" value="{{ticket.quantity}}" name="ticket_quantities">
                             {% endfor %}
 

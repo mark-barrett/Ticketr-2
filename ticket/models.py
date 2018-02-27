@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-from event.models import Event
+from event.models import Event, Ticket
 
 
 class Order(models.Model):
@@ -21,6 +21,7 @@ class Order(models.Model):
 class OrderTicket(models.Model):
     # Value that generates the QR code
     ticket_number = models.CharField(max_length=20)
+    ticket = models.ForeignKey(Ticket)
     order = models.ForeignKey(Order)
     event = models.ForeignKey(Event)
     used = models.BooleanField()

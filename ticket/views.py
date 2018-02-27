@@ -1,3 +1,6 @@
+import random
+import string
+
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
@@ -6,9 +9,10 @@ from django.shortcuts import render, redirect
 from django.views import View
 
 from event.models import Ticket
+from ticket.models import Order, OrderTicket
 
 
-class Order(View):
+class OrderTickets(View):
 
     def get(self, request):
         return redirect('/')
@@ -60,6 +64,10 @@ class Order(View):
 
 class ConfirmOrder(View):
 
+
+    def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
+        return ''.join(random.choice(chars) for _ in range(20))
+
     def get(self, request):
         return redirect('/')
 
@@ -75,6 +83,7 @@ class ConfirmOrder(View):
 
             ticket_ids = request.POST.getlist('ticket_ids')
             quantities = request.POST.getlist('ticket_quantities')
+            total = request.POST['total']
 
             # So lets register them!
             # Try find the user to see if they exist
@@ -96,10 +105,62 @@ class ConfirmOrder(View):
                     # Check if the user has been saved.
                     if user is not None:
                         # Now they have been created then lets create orders that will then be confirmed later.
-                        # First we need to create an order entry.
-                        order = Order(
+                        # First we need to create an order entry and we need to get a random number for the order number.
 
+                        unique = False
+                        random_number = ""
+
+                        while unique is False:
+                            random_number = self.id_generator()
+
+                            try:
+                                db_order = Order.objects.get(order_number=random_number)
+                            except:
+                                unique = True
+
+                        # Get the event by getting the events id from the first ticket
+                        event = Ticket.objects.get(id=int(ticket_ids[0])).event
+
+
+                        order = Order(
+                            order_number=random_number,
+                            user=user,
+                            event=event,
+                            payment_amount=total,
+                            status=False
                         )
+
+                        order.save()
+
+                        # Now we have to add all of the tickets to do the database
+                        for index, ticket in enumerate(ticket_ids):
+
+                            # Get the current ticket
+                            current_ticket = Ticket.objects.get(id=ticket)
+
+                            # Create that number of instances of it
+                            for i in range(int(quantities[index])):
+                                # We need to come up with a unique number for the ticket QR
+                                unique = False
+                                random_number = ""
+
+                                while unique is False:
+                                    random_number = self.id_generator()
+
+                                    try:
+                                        db_ticket = OrderTicket.objects.get(ticket_number=random_number)
+                                    except:
+                                        unique = True
+
+                                order_ticket = OrderTicket(
+                                    ticket_number=random_number,
+                                    ticket=current_ticket,
+                                    order=order,
+                                    event=event,
+                                    used=False
+                                )
+
+                                order_ticket.save()
 
                     else:
                         messages.error(request, 'There was an error signing up')
@@ -111,5 +172,64 @@ class ConfirmOrder(View):
             # The user does not have to be registered
             ticket_ids = request.POST.getlist('ticket_ids')
             quantities = request.POST.getlist('ticket_quantities')
+            total = request.POST['total']
+
+            print(ticket_ids)
+
+            # First we need to create an order entry and we need to get a random number for the order number.
+
+            unique = False
+            random_number = ""
+
+            while unique is False:
+                random_number = self.id_generator()
+
+                try:
+                    db_order = Order.objects.get(order_number=random_number)
+                except:
+                    unique = True
+
+            # Get the event by getting the events id from the first ticket
+            event = Ticket.objects.get(id=int(ticket_ids[0])).event
+
+            order = Order(
+                order_number=random_number,
+                user=request.user,
+                event=event,
+                payment_amount=total,
+                status=False
+            )
+
+            order.save()
+
+            # Now we have to add all of the tickets to do the database
+            for index, ticket in enumerate(ticket_ids):
+
+                # Get the current ticket
+                current_ticket = Ticket.objects.get(id=ticket)
+
+                # Create that number of instances of it
+                for i in range(int(quantities[index])):
+                    # We need to come up with a unique number for the ticket QR
+                    unique = False
+                    random_number = ""
+
+                    while unique is False:
+                        random_number = self.id_generator()
+
+                        try:
+                            db_ticket = OrderTicket.objects.get(ticket_number=random_number)
+                        except:
+                            unique = True
+
+                    order_ticket = OrderTicket(
+                        ticket_number=random_number,
+                        ticket=current_ticket,
+                        order=order,
+                        event=event,
+                        used=False
+                    )
+
+                    order_ticket.save()
 
 
