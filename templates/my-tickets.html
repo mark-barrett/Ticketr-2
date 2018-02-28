@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Ticketr - My Events{% endblock %}
+
+{% block content %}
+
+{% include 'menu.html' %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} text-center" style="margin-bottom: 0px" role="alert">
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+<div class="small_background">
+    <div class="container text-white">
+        <h2>Tickets</h2>
+    </div>
+</div>
+<div class="container small_background_container">
+    <div class="card">
+        <div class="card-body">
+
+            {% if orders %}
+                <div class="row">
+                    {% for order in orders %}
+                        <div class="col-md-4">
+                            <div class="card" style="with:18rem">
+                                <img class="card-img-top" src="/{{order.event.image}}" alt="card image cap"/>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{order.event.title}}</h5>
+                                        <p class="card-text">{{order.event.start_date}} at {{order.event.start_time}}</p></h6>
+                                    <a href="/view-order/{{order.order_number}}" class="btn btn-secondary btn-block" role="button">View Order</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+            <p>You do not have any orders yet.</p>
+            {% endif %}
+
+        </div>
+    </div>
+    <br/><br/>
+</div>
+
+{% endblock content %}

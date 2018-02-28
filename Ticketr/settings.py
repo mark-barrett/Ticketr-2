@@ -28,7 +28,7 @@ SECRET_KEY = 'eg4ayfx31-=ex8+jr5pdj8uc*p7ilkhpu9f-^7@noc5l*92so0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -43,8 +43,11 @@ INSTALLED_APPS = [
     'crispy_forms',
     'event',
     'account',
-    'ticket'
+    'ticket',
+    'paypal.standard.ipn'
 ]
+
+PAYPAL_TEST = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

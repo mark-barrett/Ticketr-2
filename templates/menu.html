@@ -31,13 +31,12 @@
                                 <i class="fa fa-user-o" aria-hidden="true"></i> {{ request.user.first_name }}
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">Lololol</a>
+                                <a class="dropdown-item" href="/tickets">Tickets</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{% url 'my-events' %}">My Events</a>
+                                <a class="dropdown-item" href="{% url 'organiser-profiles' %}">My Organiser Profiles</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{% url 'sign-out' %}">Sign Out</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{% url 'organiser-profiles' %}">Organisers Profile</a>
                             </div>
                         </li>
                     {% else %}

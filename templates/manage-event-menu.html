@@ -3,7 +3,7 @@
         <a class="nav-link {% if active == 'dashboard' %}active{% endif %}" href="/event/manage/{{ event.id }}"><i class="fa fa-sliders"></i> Dashboard</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link {% if active == 'orders' %}active{% endif %}" href="#"><i class="fa fa-eur"></i> Orders</a>
+        <a class="nav-link {% if active == 'orders' %}active{% endif %}" href="/event/manage/orders/{{event.id}}"><i class="fa fa-eur"></i> Orders</a>
     </li>
     <li class="nav-item">
         <a class="nav-link {% if active == 'tickets' %}active{% endif %}" href="/event/manage/tickets/{{ event.id }}"><i class="fa fa-ticket"></i> Tickets</a>

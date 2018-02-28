@@ -290,3 +290,26 @@ class OrganisersProfile(View):
         }
 
         return render(request, 'organisers-profile.html', context)
+
+
+class ViewEventOrders(View):
+
+    def get(self, request, event_id):
+        if request.user.is_authenticated:
+            # Check to see if the user can see these events.
+            event = Event.objects.get(id=event_id)
+
+            user = User.objects.get(id=request.user.id)
+
+            if user == request.user:
+
+                context = {
+                    'event': event,
+                    'orders': Order.objects.all().filter(event=event, status=True)
+                }
+
+                return render(request, 'manage-orders.html', context)
+            else:
+                return redirect('/event/my-events')
+        else:
+            return redirect('/account')

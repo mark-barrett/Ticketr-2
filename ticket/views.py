@@ -7,7 +7,10 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.views import View
+from paypal.standard.ipn.signals import invalid_ipn_received
+from paypal.standard.ipn.signals import valid_ipn_received
 
+from account.models import DebugModel
 from event.models import Ticket
 from ticket.models import Order, OrderTicket
 
@@ -165,7 +168,8 @@ class ConfirmOrder(View):
                                 context = {
                                     'total': total,
                                     'item_name': 'Ticket(s) for '+event.title,
-                                    'paypal_email': event.organiser.paypal_email
+                                    'paypal_email': event.organiser.paypal_email,
+                                    'order_number': order.order_number
                                 }
 
                                 return render(request, 'confirm-order.html', context)
@@ -241,8 +245,64 @@ class ConfirmOrder(View):
                     context = {
                         'total': total,
                         'item_name': 'Ticket(s) for ' + event.title,
-                        'paypal_email': event.organiser.paypal_email
+                        'paypal_email': event.organiser.paypal_email,
+                        'order_number': order.order_number
                     }
 
                     return render(request, 'confirm-order.html', context)
 
+
+class MyTickets(View):
+
+    def get(self, request):
+        if request.user.is_authenticated:
+            # Get the users orders
+            context = {
+                'orders': Order.objects.all().filter(user=request.user, status=True)
+            }
+
+            return render(request, 'my-tickets.html', context)
+
+        else:
+            return redirect('/acccount/sign-in')
+
+
+class ViewOrder(View):
+
+    def get(self, request, order_number):
+        if request.user.is_authenticated:
+            order = Order.objects.get(order_number=order_number)
+
+            # Check to make sure the user who is looking at the order has permission to do so.
+            if order.user == request.user:
+                context = {
+                    'order': order
+                }
+
+                return render(request, 'view-order.html', context)
+
+        else:
+            return redirect('/account/sign-in')
+
+
+def paypal_response(sender, **kwargs):
+    ipn_obj = sender
+
+    # Lets dissect the ipn_obj.
+    # Check if valid
+    if ipn_obj.payment_status == 'Completed':
+        # Now lets get the order model using the custom order number passed to PayPal.
+        order = Order.objects.get(order_number=ipn_obj.custom)
+
+        # Now check to see if the order is the same price to prevent posting from unknown sources.
+        if ipn_obj.mc_gross == order.payment_amount:
+            # Now that all the checks are done, make the order active
+            order.status = True
+
+            order.save()
+
+    debug = DebugModel(string="Hello World")
+
+    debug.save()
+
+valid_ipn_received.connect(paypal_response)

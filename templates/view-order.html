@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Ticketr - View Order{% endblock %}
+
+{% block content %}
+
+{% include 'menu.html' %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} text-center" style="margin-bottom: 0px" role="alert">
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+<div class="small_background">
+    <div class="container text-white">
+        <h2>Tickets</h2>
+    </div>
+</div>
+<div class="container small_background_container">
+    <div class="card">
+        <div class="card-body">
+
+        </div>
+    </div>
+    <br/><br/>
+</div>
+
+{% endblock content %}
