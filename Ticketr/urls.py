@@ -28,5 +28,6 @@ urlpatterns = [
     url(r'^confirm-order', ticket.views.ConfirmOrder.as_view(), name='confirm-order'),
     url(r'^tickets', ticket.views.MyTickets.as_view(), name='tickets'),
     url(r'^view-order/(?P<order_number>[a-zA-Z0-9]+)$', ticket.views.ViewOrder.as_view(), name='view-order'),
+    url(r'^payment-successful', ticket.views.PaymentSuccessful.as_view(), name='payment-successful'),
     url(r'^paypal/', include('paypal.standard.ipn.urls')),
 ]

@@ -1,8 +1,11 @@
 import random
 import string
 
+import qrcode
+from io import StringIO
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -172,7 +175,7 @@ class ConfirmOrder(View):
                                     'order_number': order.order_number
                                 }
 
-                                return render(request, 'confirm-order.html', context)
+                            return render(request, 'confirm-order.html', context)
 
                     else:
                         messages.error(request, 'There was an error signing up')
@@ -183,8 +186,6 @@ class ConfirmOrder(View):
             ticket_ids = request.POST.getlist('ticket_ids')
             quantities = request.POST.getlist('ticket_quantities')
             total = request.POST['total']
-
-            print(ticket_ids)
 
             # First we need to create an order entry and we need to get a random number for the order number.
 
@@ -212,6 +213,7 @@ class ConfirmOrder(View):
 
             order.save()
 
+
             # Now we have to add all of the tickets to do the database
             for index, ticket in enumerate(ticket_ids):
 
@@ -219,8 +221,9 @@ class ConfirmOrder(View):
                 current_ticket = Ticket.objects.get(id=ticket)
 
                 # Create that number of instances of it
-                for i in range(int(quantities[index])):
+                for i in range(0, int(quantities[index])):
                     # We need to come up with a unique number for the ticket QR
+                    print("HEHEHEHEHE")
                     unique = False
                     random_number = ""
 
@@ -249,7 +252,7 @@ class ConfirmOrder(View):
                         'order_number': order.order_number
                     }
 
-                    return render(request, 'confirm-order.html', context)
+                return render(request, 'confirm-order.html', context)
 
 
 class MyTickets(View):
@@ -274,9 +277,10 @@ class ViewOrder(View):
             order = Order.objects.get(order_number=order_number)
 
             # Check to make sure the user who is looking at the order has permission to do so.
-            if order.user == request.user:
+            if order.user == request.user and order.status == True:
                 context = {
-                    'order': order
+                    'order': order,
+                    'tickets': OrderTicket.objects.all().filter(order=order)
                 }
 
                 return render(request, 'view-order.html', context)
@@ -284,6 +288,20 @@ class ViewOrder(View):
         else:
             return redirect('/account/sign-in')
 
+
+class PaymentSuccessful(View):
+
+    def get(self, request):
+        if request.user.is_authenticated:
+            order = Order.objects.filter(user=request.user).order_by('-id')[0]
+
+            context = {
+                'payment_successful': order
+            }
+
+            return render(request, 'payment-successful.html', context)
+        else:
+            return redirect('/account/sign-in')
 
 def paypal_response(sender, **kwargs):
     ipn_obj = sender
@@ -300,6 +318,30 @@ def paypal_response(sender, **kwargs):
             order.status = True
 
             order.save()
+
+            # Let us loop through the OrderTickets and make qr codes for each ticket
+            order_tickets = OrderTicket.objects.all().filter(order=order)
+
+            for order_ticket in order_tickets:
+                qr = qrcode.QRCode(version=1,
+                                   error_correction=qrcode.constants.ERROR_CORRECT_L,
+                                   box_size=6,
+                                   border=0)
+                qr.add_data(order.order_number)
+                qr.make(fit=True)
+
+                img = qr.make_image()
+
+                qr = qrcode.QRCode(version=1,
+                                   error_correction=qrcode.constants.ERROR_CORRECT_L,
+                                   box_size=6,
+                                   border=0)
+                qr.add_data(order.order_number)
+                qr.make(fit=True)
+
+                img = qr.make_image()
+
+                img.save("static/qr_codes/qr_" + order_ticket.ticket_number + ".png")
 
     debug = DebugModel(string="Hello World")
 

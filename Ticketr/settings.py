@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'event',
     'account',
     'ticket',
-    'paypal.standard.ipn'
+    'paypal.standard.ipn',
+    'qrcode'
 ]
 
 PAYPAL_TEST = True
