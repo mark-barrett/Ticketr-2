@@ -1,10 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Ticketr - Payment Successful{% endblock %}
+
+{% block content %}
+
+{% include 'menu.html' %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} text-center" style="margin-bottom: 0px" role="alert">
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+<div class="small_background">
+    <div class="container text-white">
+        <h2><i class="fa fa-check"></i> Payment Successful</h2>
+    </div>
+</div>
+<div class="container small_background_container">
+    <div style="margin-top: 100px">
+        <div class="row">
+            <div class="col-md-7 py-2">
+                <div class="h-100">
+                    <h2>Awesome {{request.user.first_name}}, you are going to {{order.event.title}}!</h2>
+                    <p>It may take a few moments for your order/tickets to show up in your "Tickets" section. Don't worry, the payment was successful, we are just waiting for a response from PayPal.</p>
+                </div>
+            </div>
+            <div class="col-md-5 py-2">
+                <div class="h-100">
+                    <img src="/{{order.event.image}}" width="100%" style="border-radius: 5px; margin-top: -50px; bottom: 0"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <strong>Here are your order details:</strong>
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">Order Number</th>
+            <th scope="col">User</th>
+            <th scope="col">Amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{order.order_number}}</td>
+            <td>{{order.user.first_name}} {{order.user.last_name}}</td>
+            <td>&euro;{{order.payment_amount}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p>You can now find your tickets in your "Tickets" section below:</p>
+    <a href="/tickets" class="btn btn-success">Take me to my Tickets</a>
+</div>
+
+{% endblock content %}

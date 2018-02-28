@@ -296,7 +296,7 @@ class PaymentSuccessful(View):
             order = Order.objects.filter(user=request.user).order_by('-id')[0]
 
             context = {
-                'payment_successful': order
+                'order': order
             }
 
             return render(request, 'payment-successful.html', context)
